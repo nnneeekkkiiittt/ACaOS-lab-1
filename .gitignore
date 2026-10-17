@@ -1,0 +1,6 @@
+backup_dir/
+log_dir/
+
+*.tar.gz
+*.tar.lzma
+*.im
