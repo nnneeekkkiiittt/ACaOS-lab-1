@@ -108,6 +108,10 @@ done
  } < "$FILE_LIST"
 
 
+if (( SELECTED_COUNT == 0 )); then # для защиты от кейса когда ос помечает файлы как удаленные но не удаляет
+    error "no files available for archiving"
+fi
+
 if (( SELECTED_SIZE_KB < NEEDED_FREE_KB )); then
     echo "WARN: not enough files to reach the threshold."
     while true; do
