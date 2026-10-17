@@ -171,14 +171,7 @@ run_test_5() {
     local archive
     archive=$(find "$BACKUP_DIR" -type f -name "*.tar.lzma" 2>/dev/null | head -n 1)
 
-    local is_lzma=1
-    if [[ -n "$archive" ]]; then
-        if file -b "$archive" | grep -qi "lzma"; then
-            is_lzma=0
-        fi
-    fi
-
-    if (( ret == 0 )) && [[ -n "$archive" && "$is_lzma" -eq 0 ]]; then
+    if (( ret == 0 )) && [[ -n "$archive" ]] && tar --lzma -tf "$archive" >/dev/null 2>&1; then
         record_result "$test_name" 0
     else
         record_result "$test_name" 1
