@@ -112,6 +112,29 @@ if (( SELECTED_COUNT == 0 )); then # для защиты от кейса ког�
     error "no files available for archiving"
 fi
 
+if (( SELECTED_SIZE_KB < NEEDED_FREE_KB )); then
+    echo "WARN: not enough files to reach the threshold."
+    while true; do
+        read -r -p "archive these files anyway? [y/n]: " answer || {
+            echo "no input received; aborting"
+            exit 1
+        }
+
+        case "$answer" in
+            y|Y)
+                break
+                ;;
+            n|N)
+                echo "cancelling programm, no files were archived"
+                exit 0
+                ;;
+            *)
+                echo "invalid input. please enter y or n."
+                ;;
+        esac
+    done
+fi
+
 echo "Selected  : $SELECTED_COUNT file(s)"
 echo "Data      : ${SELECTED_SIZE_KB} KiB"
 
