@@ -108,8 +108,27 @@ done
  } < "$FILE_LIST"
 
 
-if (( SELECTED_COUNT == 0 )); then # для защиты от кейса когда ос помечает файлы как удаленные но не удаляет
-    error "no files available for archiving"
+if (( SELECTED_SIZE_KB < NEEDED_FREE_KB )); then
+    echo "WARN: not enough files to reach the threshold."
+    while true; do
+        read -r -p "archive these files anyway? [y/n]: " answer || {
+            echo "no input received; aborting"
+            exit 1
+        }
+
+        case "$answer" in
+            y|Y)
+                break
+                ;;
+            n|N)
+                echo "cancelling programm, no files were archived"
+                exit 0
+                ;;
+            *)
+                echo "invalid input. please enter y or n."
+                ;;
+        esac
+    done
 fi
 
 echo "Selected  : $SELECTED_COUNT file(s)"
